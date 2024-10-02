@@ -4,7 +4,9 @@ This example project is an effort to show how an [MVVM architecture](https://en.
 
 ## Application
 
-This example project allows you to add multiple counters to the screen,
+This example project allows you to add multiple counters/incrementers to the screen. `CounterCollectionView` has buttons to add or remove the counters. When a counter is added, the view reacts to add additional `CounterView` components.
+
+The counters themselves are initialized to zero, but their values are stored in the registry on each update. This means that each time the app is launched, if a counter had been previously created, it will be automatically set to the last stored value.
 
 ## Architecture
 

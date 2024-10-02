@@ -1,0 +1,75 @@
+import "pkg:/source/utils/is.bs"
+import "pkg:/source/utils/utils.bs"
+import "interfaces.bs"
+typecast m as BaseViewModelM
+
+sub init()
+  m.managers = m.global.managers
+  m.observedViewFields = {}
+end sub
+
+'#region lifecycle
+
+sub setup(params = {} as roAssociativeArray)
+  onCreate(params)
+  onBind()
+end sub
+
+
+' Override this method in your ViewModel to clean up resources
+sub onCreate(params as roAssociativeArray)
+end sub
+
+
+' Override this method in your ViewModel to bind the view
+sub onBind()
+end sub
+
+
+' Called when the view is destroyed
+' Automatically unobserves all observed fields
+' Do not override this method, use onDestroy instead
+sub destroy()
+  onDestroy()
+  for each fieldName in m.observedViewFields.keys()
+    unobserveViewField(fieldName)
+  end for
+  m.top.view = invalid
+end sub
+
+' Override this method in your ViewModel to clean up resources
+sub onDestroy()
+end sub
+
+'#endregion
+
+
+'#region observers
+' Observes a field on the view
+'
+' @param {string} fieldName
+' @param {Function} handler
+' @return {boolean}
+function observeViewField(fieldName as string, handler as function or string) as boolean
+  if is.valid(m.top.view) and m.top.view.hasField(fieldName)
+    handlerName = utils.getFunctionName(handler)
+    m.top.view.observeFieldScoped(fieldName, handlerName)
+    m.observedViewFields[fieldName] = true
+    return true
+  end if
+  return false
+end function
+
+
+' Unobserves a field on the view
+'
+' @param {string} fieldName
+sub unobserveViewField(fieldName as string)
+  if is.valid(m.top.view)
+    m.top.view.unobserveFieldScoped(fieldName)
+  end if
+  m.observedViewFields[fieldName] = false
+end sub
+
+'#endregion
+

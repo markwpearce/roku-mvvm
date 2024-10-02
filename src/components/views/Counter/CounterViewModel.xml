@@ -1,0 +1,8 @@
+<component name="CounterViewModel" extends="BaseViewModel">
+    <interface>
+        <field id="amount" type="integer" alias="model.amount" alwaysNotify="true" />
+    </interface>
+    <children>
+        <CountModel id="model" role="model" />
+    </children>
+</component>

@@ -1,0 +1,7 @@
+import "pkg:/components/common/interfaces.bs"
+
+interface MainSceneM
+  top as roSGNodeMainScene
+  global as GlobalNode
+  counterCollection as roSGNodeCounterView
+end interface

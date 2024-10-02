@@ -1,0 +1,7 @@
+interface GlobalNode extends roSGNode
+  managers as ManagersNode
+end interface
+
+interface ManagersNode extends roSGNode
+  CounterManager as roSGNodeCounterManager
+end interface

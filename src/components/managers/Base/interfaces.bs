@@ -1,0 +1,7 @@
+import "pkg:/components/common/interfaces.bs"
+
+interface BaseManagerM
+  top as roSGNodeBaseManager
+  global as GlobalNode
+  managers as ManagersNode
+end interface

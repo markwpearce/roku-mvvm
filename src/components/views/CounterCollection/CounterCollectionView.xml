@@ -1,0 +1,16 @@
+<component name="CounterCollectionView" extends="BaseView">
+    <interface>
+        <field id="addClicked" type="node" alias="addButton.buttonSelected" alwaysNotify="true" />
+        <field id="removeClicked" type="node" alias="removeButton.buttonSelected"
+            alwaysNotify="true" />
+    </interface>
+
+    <children>
+        <Button id="addButton" text="Add Counter" translation="[0, 0]" showFocusFootprint="true" />
+        <Button id="removeButton" text="Remove Counter" translation="[500, 0]"
+            showFocusFootprint="true" />
+        <Label id="numberOfCountersLabel" translation="[1000, 25]"
+            font="font:MediumBoldSystemFont" />
+        <LayoutGroup id="counterList" translation="[0,100]" />
+    </children>
+</component>

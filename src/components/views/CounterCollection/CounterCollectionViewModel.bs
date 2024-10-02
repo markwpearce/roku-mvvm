@@ -1,0 +1,34 @@
+import "interfaces.bs"
+typecast m as CounterCollectionViewModelM
+
+sub init()
+end sub
+
+sub onBind()
+  observeViewField("addClicked", addCounter)
+  observeViewField("removeClicked", removeCounter)
+end sub
+
+sub addCounter()
+  countModel = m.top.model.createChild("CountModel")
+  countModel.index = m.top.model.getChildCount()
+  m.top.model = m.top.model ' force refresh
+end sub
+
+sub removeCounter()
+  counterNodes = m.top.model
+  if counterNodes.getChildCount() > 0
+    counterToRemove = counterNodes.getChild(counterNodes.getChildCount() - 1)
+    counterNodes.removeChild(counterToRemove)
+    counterToRemove@.destroy()
+    m.top.model = m.top.model ' force refresh
+  end if
+end sub
+
+
+sub onDestroy()
+  counterNodes = m.top.model
+  for i = counterNodes.count() - 1 to 0 step -1
+    removeCounter()
+  end for
+end sub

@@ -1,0 +1,32 @@
+import "interfaces.bs"
+import "pkg:/source/utils/registry.bs"
+import "pkg:/source/utils/is.bs"
+typecast m as CounterManagerM
+
+
+sub incrementCounter(model as roSGNodeCountModel)
+  newAmount = model.amount + 1
+  registry.writeSync(getCounterKey(model.index), "amount", newAmount.ToStr())
+  model.amount = newAmount
+end sub
+
+sub decrementCounter(model as roSGNodeCountModel)
+  newAmount = model.amount - 1
+  registry.writeSync(getCounterKey(model.index), "amount", newAmount.ToStr())
+  model.amount = newAmount
+end sub
+
+sub loadCounter(model as roSGNodeCountModel, counterIndex as integer)
+  savedData = registry.readSync(getCounterKey(counterIndex), "amount")
+  if invalid <> savedData
+    model.amount = (savedData as string).toInt()
+  else
+    model.amount = 0
+  end if
+  model.index = counterIndex
+end sub
+
+
+function getCounterKey(counterIndex as integer) as string
+  return "counter_" + counterIndex.ToStr()
+end function

@@ -1,0 +1,47 @@
+import "pkg:/source/utils/is.bs"
+import "interfaces.bs"
+typecast m as MainSceneM
+
+sub init()
+  m.counterCollection = m.top.findNode("CounterCollection")
+
+  setupManagers()
+  setup()
+
+  ' This is required to pass certification.
+  ' Specified in section 3.2 of the Roku Certification Criteria.
+  ' Reference: https://developer.roku.com/docs/developer-program/certification/certification.md#3-performance
+  m.top.signalBeacon("AppLaunchComplete")
+end sub
+
+
+' MainScene function run the setup function for all managers that require it
+' This should only be done after the channel config has been returned
+'
+' @since version 2.0
+sub setupManagers()
+  if is.node(m.global.managers)
+    return
+  end if
+  managersNode = CreateObject("roSGNode", "Node")
+
+  managersList = ["CounterManager"]
+  managersAA = {}
+  for each managerName in managersList
+    managerNode = CreateObject("roSGNode", managerName) as roSGNodeBaseManager
+    managersAA[managerName] = managerNode
+  end for
+
+  managersNode.update(managersAA, true)
+  m.global.update({managers: managersNode}, true)
+
+  for each item in managersAA.items()
+    (item.value as roSGNodeBaseManager)@.onCreate()
+  end for
+end sub
+
+
+sub setup()
+  m.counterCollection@.setup()
+  m.counterCollection@.setFocus(true)
+end sub

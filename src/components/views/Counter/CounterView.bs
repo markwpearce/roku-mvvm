@@ -1,0 +1,40 @@
+import "interfaces.bs"
+typecast m as CounterViewM
+
+sub init()
+  m.incrementButton = m.top.findNode("incrementButton")
+  m.decrementButton = m.top.findNode("decrementButton")
+  m.counterLabel = m.top.findNode("counterLabel")
+  m.lastFocusedNode = m.incrementButton
+end sub
+
+sub onSetupView(setupParams = {} as roAssociativeArray)
+  ' Bind the view model to the view
+  bindViewModelField("amount", invalid, onAmountChanged)
+
+  ' Initialize view
+  onAmountChanged()
+end sub
+
+function handleKeyEvent(key as string, press as boolean) as boolean
+  handled = false
+  if press
+    if key = "right" or key = "left"
+      toggleButtonFocus()
+      handled = true
+    end if
+  end if
+  return handled
+end function
+
+sub toggleButtonFocus()
+  if m.incrementButton.isInFocusChain()
+    setFocusOn(m.decrementButton)
+  else
+    setFocusOn(m.incrementButton)
+  end if
+end sub
+
+sub onAmountChanged(event = invalid as roSGNodeEvent)
+  m.counterLabel.text = `Counter ${m.top.viewModel.model.index}: ${m.top.viewModel.amount}`
+end sub

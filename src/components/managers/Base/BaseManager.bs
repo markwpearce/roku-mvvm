@@ -1,0 +1,9 @@
+import "interfaces.bs"
+typecast m as BaseManagerM
+
+sub init()
+  m.managers = m.global.managers
+end sub
+
+sub onCreate(params = {} as roAssociativeArray)
+end sub

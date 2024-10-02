@@ -1,0 +1,6 @@
+<component name="CountModel" extends="ContentNode">
+    <interface>
+        <field id="index" type="integer" value="0" />
+        <field id="amount" type="integer" value="0" />
+    </interface>
+</component>

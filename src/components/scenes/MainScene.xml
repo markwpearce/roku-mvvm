@@ -1,0 +1,5 @@
+<component name="MainScene" extends="Scene">
+    <children>
+        <CounterCollectionView id="counterCollection" translation="[100,100]" />
+    </children>
+</component>

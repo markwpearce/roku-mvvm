@@ -1,0 +1,7 @@
+<component name="CounterManager" extends="BaseManager">
+    <interface>
+        <function name="incrementCounter" />
+        <function name="decrementCounter" />
+        <function name="loadCounter" />
+    </interface>
+</component>

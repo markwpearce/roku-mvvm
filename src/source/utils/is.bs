@@ -1,0 +1,50 @@
+namespace is
+
+  function valid(value as dynamic) as boolean
+    return value <> invalid
+  end function
+
+  function func(value as dynamic) as boolean
+    return hasInterface(value, "ifFunction")
+  end function
+
+  function node(value as dynamic) as boolean
+    return hasInterface(value, "ifSgNodeField")
+  end function
+
+  function number(value as dynamic) as boolean
+    return is.integer(value) or is.float(value)
+  end function
+
+  function string(value as dynamic) as boolean
+    return hasInterface(value, "ifStringOps")
+  end function
+
+  function nonEmptyString(value as dynamic) as boolean
+    return hasInterface(value, "ifStringOps") and (value as string).len() > 0
+  end function
+
+  function integer(value as dynamic) as boolean
+    return hasInterface(value, "ifInt") or hasInterface(value, "ifLongInt")
+  end function
+
+  function float(value as dynamic) as boolean
+    return hasInterface(value, "ifFloat") or hasInterface(value, "ifDouble")
+  end function
+
+  function assocArray(value as dynamic) as boolean
+    return hasInterface(value, "ifAssociativeArray")
+  end function
+
+  function hasInterface(value as dynamic, interfaceName as string) as boolean
+    if is.valid(value)
+      iface = getInterface(value, interfaceName)
+      return is.valid(iface)
+    end if
+    return false
+  end function
+
+end namespace
+
+
+

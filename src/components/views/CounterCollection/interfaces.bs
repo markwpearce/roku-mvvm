@@ -1,0 +1,25 @@
+import "pkg:/components/views/Base/interfaces.bs"
+
+interface CounterCollectionViewM extends BaseViewM
+  top as CounterCollectionViewTyped
+  addButton as roSGNodeButton
+  removeButton as roSGNodeButton
+  counterList as roSGNodeLayoutGroup
+  numberOfCountersLabel as roSGNodeLabel
+  focusIndex as integer
+end interface
+
+interface CounterCollectionViewTyped extends roSGNodeCounterCollectionView
+  viewModel as CounterCollectionViewModelTyped
+end interface
+
+
+interface CounterCollectionViewModelM extends BaseViewM
+  top as roSGNodeCounterCollectionViewModel
+end interface
+
+interface CounterCollectionViewModelTyped extends roSGNodeCounterCollectionViewModel
+  model as roSGNodeContentNode
+end interface
+
+

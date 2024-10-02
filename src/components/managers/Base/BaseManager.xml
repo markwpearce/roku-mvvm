@@ -1,0 +1,6 @@
+<component name="BaseManager" extends="Node">
+
+    <interface>
+        <function name="onCreate" />
+    </interface>
+</component>

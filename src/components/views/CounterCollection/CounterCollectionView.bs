@@ -1,0 +1,114 @@
+import "interfaces.bs"
+typecast m as CounterCollectionViewM
+
+sub init()
+  m.addButton = m.top.findNode("addButton")
+  m.removeButton = m.top.findNode("removeButton")
+  m.counterList = m.top.findNode("counterList")
+  m.numberOfCountersLabel = m.top.findNode("numberOfCountersLabel")
+  m.focusIndex = 0
+  m.lastFocusedNode = m.addButton
+end sub
+
+sub onSetupView(setupParams = {} as roAssociativeArray)
+  ' Bind the view model to the view
+  bindViewModelField("model", invalid, updateCounterView)
+
+  ' Initialize view
+  updateCounterView()
+end sub
+
+
+function handleKeyEvent(key as string, press as boolean) as boolean
+  handled = false
+  if press
+    if key = "right" or key = "left"
+      toggleButtonFocus()
+      handled = true
+    end if
+    if key = "up"
+      focusPrevious()
+      handled = true
+    else if key = "down"
+      focusNext()
+      handled = true
+    else if key = "back"
+      focusButtons()
+      handled = true
+    end if
+  end if
+  return handled
+end function
+
+
+sub toggleButtonFocus()
+  if m.addButton.isInFocusChain()
+    setFocusOn(m.removeButton)
+  else
+    setFocusOn(m.addButton)
+  end if
+end sub
+
+sub focusNext()
+  if m.focusIndex < m.counterList.getChildCount()
+    setFocusOn(m.counterList.getChild(m.focusIndex))
+    m.focusIndex++
+  end if
+end sub
+
+sub focusPrevious()
+  if m.focusIndex > 1
+    m.focusIndex--
+    setFocusOn(m.counterList.getChild(m.focusIndex - 1))
+  else
+    focusButtons()
+  end if
+end sub
+
+sub focusButtons()
+  setFocusOn(m.addButton)
+  m.focusIndex = 0
+end sub
+
+sub focusList()
+  setFocusOn(m.counterList)
+  m.focusIndex = 1
+end sub
+
+sub updateCounterView()
+  ' Add new views for each counter
+  countersModel = m.top.viewModel.model
+  numberOfCounters = m.top.viewModel.model.getChildCount()
+  numberOfViews = m.counterList.getChildCount()
+  difference = numberOfCounters - numberOfViews
+  if difference > 0
+    for i = numberOfViews to numberOfCounters - 1
+      model = countersModel.getChild(i)
+      addNewCounterView(model)
+    end for
+  else if difference < 0
+    ' remove counter views
+    for i = numberOfViews - 1 to numberOfCounters step -1
+      removeCounterViewByIndex(i)
+    end for
+  end if
+
+  m.numberOfCountersLabel.text = `Number of counters: ${m.top.viewModel.model.getChildCount()}`
+end sub
+
+
+sub addNewCounterView(model as roSgNodeCountModel)
+  counterView = m.counterList.createChild("CounterView")
+  counterView@.setup({index: model.index})
+  counterView.update({
+    translation: [0, m.counterList.getChildCount() * 150]
+  })
+end sub
+
+sub removeCounterViewByIndex(index as integer)
+  viewToRemove = m.counterList.getChild(index)
+  if is.node(viewToRemove)
+    m.counterList.removeChild(viewToRemove)
+    viewToRemove@.destroy()
+  end if
+end sub

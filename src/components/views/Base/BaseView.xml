@@ -1,0 +1,8 @@
+<component name="BaseView" extends="Group">
+    <interface>
+        <field id="viewModel" type="node" />
+        <function name="setup" />
+        <function name="setFocus" />
+        <function name="destroy" />
+    </interface>
+</component>

@@ -1,0 +1,12 @@
+namespace utils
+
+  function getFunctionName(handler as function or string) as string
+    if is.string(handler)
+      handlerName = handler
+    else is.func(handler)
+      handlerName = handler.ToStr().split(" ")[1]
+    end if
+    return handlerName
+  end function
+
+end namespace

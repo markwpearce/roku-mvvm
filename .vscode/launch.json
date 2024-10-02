@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "brightscript",
+            "request": "launch",
+            "stopOnEntry": false,
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false,
+            "rendezvousTracking": false,
+            "rootDir": "${workspaceFolder}/dist/build",
+            "preLaunchTask": "build",
+            "name": "Launch roku-mvvm (dev)",
+            "injectRdbOnDeviceComponent": true
+        },
+        {
+            "type": "brightscript",
+            "request": "launch",
+            "stopOnEntry": false,
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false,
+            "rendezvousTracking": false,
+            "rootDir": "${workspaceFolder}/dist/build",
+            "preLaunchTask": "build-prod",
+            "name": "Launch roku-mvvm (prod)"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "brightscript.bsdk": "node_modules/brighterscript",
+    "files.insertFinalNewline": true,
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml",
+        "editor.tabSize": 4
+    }
+}

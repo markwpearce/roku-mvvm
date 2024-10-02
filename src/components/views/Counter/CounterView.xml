@@ -1,0 +1,31 @@
+<component name="CounterView" extends="BaseView">
+    <interface>
+        <field id="incrementClicked" type="node" alias="incrementButton.buttonSelected"
+            alwaysNotify="true" />
+        <field id="decrementClicked" type="node" alias="decrementButton.buttonSelected"
+            alwaysNotify="true" />
+    </interface>
+    <children>
+        <Label
+            id="counterLabel"
+            text="0"
+            translation="[0, 25]"
+            width="250"
+            height="50"
+            horizAlign="center"
+            vertAlign="center"
+        />
+        <Button
+            id="incrementButton"
+            translation="[300, 00]"
+            showFocusFootprint="true"
+            text="Increment"
+        />
+        <Button
+            id="decrementButton"
+            showFocusFootprint="true"
+            translation="[700, 0]"
+            text="Decrement"
+        />
+    </children>
+</component>

@@ -1,0 +1,213 @@
+import "pkg:/source/utils/is.bs"
+import "pkg:/source/utils/utils.bs"
+import "interfaces.bs"
+typecast m as BaseViewM
+
+sub init()
+  m.managers = m.global.managers
+  m.viewModelBinds = {}
+  m.lastFocusedNode = invalid
+  m.top.observeFieldScoped("focusedChild", "onFocusedChildChanged")
+end sub
+
+'#region life cycle
+
+
+' Does all the setup for the view
+' This should be called as soon as the view is created
+' Do not override - use `onSetupView` instead
+'
+' @param {roAssociativeArray} [params={}] Parameters passed to the view model and `onSetupView`
+sub setup(params = {} as roAssociativeArray)
+  createViewModel(params)
+  onSetupView(params)
+end sub
+
+' Called when the setup function is called
+' @param {roAssociativeArray} [setupParams={}] Parameters passed to `setup`
+sub onSetupView(setupParams = {} as roAssociativeArray)
+end sub
+
+' Sets focus on the view
+'
+' @param {boolean} [on=true] Is focus being turned on?
+sub setFocus(on = true as boolean)
+  if on
+    if invalid <> m.lastFocusedNode
+      m.lastFocusedNode.setFocus(true)
+    else
+      m.top.setFocus(true)
+    end if
+  end if
+end sub
+
+' Creates a view model for the view
+' The view model is created based on the view's subtype
+' Do not override
+'
+' @param {roAssociativeArray} [setupParams={}]
+sub createViewModel(setupParams = {} as roAssociativeArray)
+  if m.top.findNode("viewModel") <> invalid
+    return
+  end if
+
+  subtypeName = m.top.subtype()
+  viewModelName = subtypeName + "Model"
+  if not subtypeName.EndsWith("View")
+    viewModelName = subtypeName + "ViewModel"
+  end if
+  m.top.viewModel = m.top.createChild(viewModelName)
+  if is.valid(m.top.viewModel)
+    m.top.viewModel.id = "viewModel"
+    (m.top.viewModel as roSGNodeBaseViewModel).view = m.top
+    m.top.viewModel@.setup(setupParams)
+  end if
+end sub
+
+
+' Observes a field on the view model
+' Can be used to bind a field on the view to a field on the view model, or to call a function provided by the view model
+' Do not override
+'
+' @param {string} viewModelField
+' @param {string} thisFieldPath
+sub bindViewModelField(viewModelField as string, thisFieldPath as string or invalid, callback = "" as function or string)
+  if is.node(m.top.viewModel) and m.top.viewModel.hasField(viewModelField)
+    m.viewModelBinds[viewModelField] = {path: thisFieldPath, callBack: callback}
+    m.top.viewModel.observeFieldScoped(viewModelField, "onBoundFieldChanged")
+    if is.valid(callback)
+      handlerName = utils.getFunctionName(callback)
+      is.nonEmptyString(handlerName)
+      m.top.viewModel.observeFieldScoped(viewModelField, handlerName)
+    end if
+    refreshBoundField(viewModelField)
+  end if
+end sub
+
+
+' Handler for when a field bound through the `bindViewModelField` function changes
+'
+' @param {roSGNodeEvent} event
+sub onBoundFieldChanged(event as roSGNodeEvent)
+  fieldName = event.getField()
+  if m.viewModelBinds.DoesExist(fieldName)
+    refreshBoundField(fieldName)
+  end if
+end sub
+
+
+' Refreshes a value that is mapped to a field on the view model through the `bindViewModelField` function
+'
+' @param {string} fieldName
+sub refreshBoundField(fieldName as string)
+  if m.viewModelBinds.DoesExist(fieldName)
+    newValue = m.top.viewModel[fieldName]
+    fieldPath = m.viewModelBinds[fieldName].path
+    if is.nonEmptyString(fieldPath)
+      fieldPathParts = fieldPath.split(".")
+      if lcase(fieldPathParts[0]) = "m" and fieldPathParts.count() > 1
+        currentObj = m
+        validItem = true
+        for i = 1 to fieldPathParts.count() - 2
+          if is.assocArray(currentObj)
+            currentObj = currentObj[fieldPathParts[i]]
+          else
+            validItem = false
+            exit for
+          end if
+        end for
+        if is.assocArray(currentObj) and validItem
+          currentObj[fieldPathParts[fieldPathParts.count() - 1]] = newValue
+        end if
+      end if
+    end if
+  end if
+end sub
+
+
+' Called when the view is destroyed
+' This will remove any observers on the view model, and also destroy the view model
+'
+sub destroy()
+  onDestroy()
+  if is.node(m.top.viewModel)
+    for each item in m.viewModelBinds.Items()
+      m.top.viewModel.unobserveFieldScoped(item.key)
+    end for
+    m.top.viewModel@.destroy()
+  end if
+end sub
+
+
+' Override this method in your ViewModel to clean up resources
+'
+sub onDestroy()
+end sub
+
+'#endregion
+
+
+'#region navigation
+
+' Standard key event handler
+' Any "global" key events should be handled here
+' Specific key events should be handled in the view's handleKeyEvent function
+'
+' @param {string} key
+' @param {boolean} press
+' @return {boolean}
+function onKeyEvent(key as string, press as boolean) as boolean
+  handled = handleKeyEvent(key, press)
+  if not handled
+    if key = "back"
+      if press
+        ' potentially handle global back navigation here
+        ' m.managers.NavigationManager@.goBack()
+        ' handled = true
+      end if
+    end if
+  end if
+  return handled
+end function
+
+
+' Override this function in the view to handle key presses specific to the view
+'
+' @param {string} key
+' @param {boolean} press
+' @return {boolean}
+function handleKeyEvent(key as string, press as boolean) as boolean
+  return false
+end function
+
+
+' Helper function to set focus on a node, and keep track of the last focused node
+'
+' @param {roSGNode} node
+sub setFocusOn(node as roSGNode)
+  if invalid <> m.lastFocusedNode
+    ' remove focus from last focused node
+    if node.isSubtype("BaseView")
+      (node as roSGNodeBaseView)@.setFocus(false)
+    end if
+  end if
+  m.lastFocusedNode = node
+  if node.isSubtype("BaseView")
+    (node as roSGNodeBaseView)@.setFocus(true)
+  else
+    node.setFocus(true)
+  end if
+end sub
+
+
+' Handler for when thw focused child changes
+'
+' @param {roSGNodeEvent} event
+sub onFocusedChildChanged(event as roSGNodeEvent)
+  focusedChild = m.top.focusedChild as roSGNode
+  if is.valid(focusedChild) and m.top.isSameNode(focusedChild.getParent())
+    m.lastFocusedNode = focusedChild
+  end if
+end sub
+
+'#endregion

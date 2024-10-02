@@ -1,0 +1,30 @@
+import "interfaces.bs"
+import "pkg:/source/utils/registry.bs"
+
+typecast m as CounterViewModelM
+
+sub init()
+end sub
+
+sub onCreate(params = {} as roAssociativeArray)
+  index = 0
+  if is.valid(params.index)
+    index = params.index
+  end if
+  m.managers.CounterManager@.loadCounter(m.top.model, index)
+end sub
+
+sub onBind()
+  observeViewField("incrementClicked", onIncrement)
+  observeViewField("decrementClicked", onDecrement)
+end sub
+
+
+sub onIncrement(event as roSGNodeEvent)
+  m.managers.CounterManager@.incrementCounter(m.top.model)
+end sub
+
+
+sub onDecrement(event as roSGNodeEvent)
+  m.managers.CounterManager@.decrementCounter(m.top.model)
+end sub

@@ -1,0 +1,9 @@
+<component name="BaseViewModel" extends="Node">
+    <interface>
+        <field id="view" type="node" alwaysNotify="true" />
+        <field id="model" type="node" alwaysNotify="true" />
+
+        <function name="setup" />
+        <function name="destroy" />
+    </interface>
+</component>

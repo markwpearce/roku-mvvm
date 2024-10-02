@@ -1,0 +1,21 @@
+import "pkg:/components/managers/Base/interfaces.bs"
+import "pkg:/components/common/interfaces.bs"
+
+interface BaseViewM
+  top as roSGNodeBaseView
+  global as GlobalNode
+  managers as ManagersNode
+  lastFocusedNode as roSGNode
+  viewModel as roSGNodeBaseViewModel
+  viewModelBinds as roAssociativeArray
+end interface
+
+
+interface BaseViewModelM
+  top as roSGNodeBaseViewModel
+  global as GlobalNode
+  managers as ManagersNode
+  view as roSGNodeBaseView
+  model as roSGNode
+  observedViewFields as roAssociativeArray
+end interface

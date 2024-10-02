@@ -1,0 +1,19 @@
+namespace registry
+
+  function readSync(section as string, key as string) as dynamic
+    sec = CreateObject("roRegistrySection", section)
+    if is.valid(sec) and sec.exists(key)
+      return sec.read(key)
+    end if
+    return invalid
+  end function
+
+  sub writeSync(section as string, key as string, value as string)
+    sec = CreateObject("roRegistrySection", section)
+    if is.valid(sec)
+      sec.Write(key, value)
+      sec.Flush()
+    end if
+  end sub
+
+end namespace

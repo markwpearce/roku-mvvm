@@ -41,7 +41,7 @@ one to represent the properties on `m`, and potentially an interface narrowing o
 
 In the `CounterViewModel` component, the `model` field is defined as a `node`, but for our purposes, we know it will be the specific node of subtype `CounterModel`. This we extend the given type `roSGNodeCounterViewModel` with the specifics:
 
-```bs
+```brighterscript
 interface CounterViewModelTyped extends roSgNodeCounterViewModel
   model as roSGNodeCountModel
 end interface
@@ -49,7 +49,7 @@ end interface
 
 Likewise, inside the component, we know there will be specific properties available on `m`. One of these is `m.top`, which will be the specific type `CounterViewModelTyped`:
 
-```bs
+```brighterscript
 interface CounterViewModelM extends BaseViewModelM
   top as CounterViewModelTyped
 end interface
@@ -57,7 +57,7 @@ end interface
 
 Then at the top of each file specific to that component, the `interfaces.bs` file in imported, and we tell the compiler what to treat `m` as using the `typecast` statement:
 
-```bs
+```brighterscript
 import "interfaces.bs"
 typecast m as CounterViewModelM
 ```

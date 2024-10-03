@@ -1,3 +1,5 @@
-interface CounterManagerM
+import "pkg:/components/managers/Base/interfaces.bs"
+
+interface CounterManagerM extends BaseManagerM
   top as roSGNodeCounterManager
 end interface

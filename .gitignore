@@ -1,5 +1,5 @@
 dist/
 out/
-bsconfig.json
+.env
 node_modules
 roku_modules

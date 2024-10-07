@@ -8,6 +8,19 @@ This example project allows you to add multiple counters/incrementers to the scr
 
 The counters themselves are initialized to zero, but their values are stored in the registry on each update. This means that each time the app is launched, if a counter had been previously created, it will be automatically set to the last stored value.
 
+## Getting Started
+
+1. Run `npm install`
+2. Create an `.env` file like:
+
+```
+ROKU_HOST=<IP address of Roku Device>
+ROKU_PASSWORD=<Developer password of Roku Device>
+```
+
+3. Run from command line: `npm run sideload`
+4. Run from [VSCode](#launching-your-app)
+
 ## Architecture
 
 The Model-View-ViewModel architecture pattern aims to separate the view/user-interface from the business logic of the app.

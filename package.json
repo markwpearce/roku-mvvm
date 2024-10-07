@@ -5,8 +5,8 @@
         "promises": "npm:@rokucommunity/promises@^0.3.0"
     },
     "devDependencies": {
-        "@rokucommunity/bslint": "^1.0.0-alpha.37",
-        "brighterscript": "^1.0.0-alpha.38",
+        "@rokucommunity/bslint": "^1.0.0-alpha.39",
+        "brighterscript": "^1.0.0-alpha.39",
         "brighterscript-formatter": "^1.7.5",
         "roku-deploy": "^4.0.0-alpha.1"
     },

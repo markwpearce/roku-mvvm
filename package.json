@@ -7,7 +7,8 @@
     "devDependencies": {
         "@rokucommunity/bslint": "^1.0.0-alpha.37",
         "brighterscript": "^1.0.0-alpha.38",
-        "brighterscript-formatter": "^1.7.5"
+        "brighterscript-formatter": "^1.7.5",
+        "roku-deploy": "^4.0.0-alpha.1"
     },
     "scripts": {
         "prebuild": "rm -rf dist",
@@ -17,7 +18,8 @@
         "lint:fix": "npm run lint -- --fix",
         "format:base": "bsfmt \"src/**/*.brs\" \"src/**/*.bs\" \"!src/components/lib/**/*\" \"!src/source/lib/**/*\" \"!**/bslib.brs\" \"!**/roku_modules/**/*\" --bsfmt-path \"config/bsfmt.jsonc\"",
         "format": "npm run format:base -- --check",
-        "format:fix": "npm run format:base -- --write"
+        "format:fix": "npm run format:base -- --write",
+        "sideload": "npm run build && source .env && npx roku-deploy deploy --rootDir=\"./dist/build\" --host=\"$ROKU_HOST\" --password=\"$ROKU_PASSWORD\""
     },
     "ropm": {
         "rootDir": "src"

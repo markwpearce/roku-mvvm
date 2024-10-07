@@ -10,7 +10,7 @@
         "fonts/**/*",
         "manifest"
     ],
-    "stagingFolderPath": "dist/build",
+    "stagingDir": "dist/build",
     "createPackage": false,
     "sourceMap": true,
     "lintConfig": "bslint.jsonc",

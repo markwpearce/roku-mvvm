@@ -21,6 +21,21 @@
             "stopDebuggerOnAppExit": false,
             "rendezvousTracking": false,
             "rootDir": "${workspaceFolder}/dist/build",
+            "preLaunchTask": "build",
+            "name": "Launch From .ENV roku-mvvm (dev)",
+            "injectRdbOnDeviceComponent": true,
+            "envFile": "${workspaceFolder}/.env",
+            "host": "${env:ROKU_HOST}",
+            "password": "${env:ROKU_PASSWORD}"
+        },
+        {
+            "type": "brightscript",
+            "request": "launch",
+            "stopOnEntry": false,
+            "enableDebuggerAutoRecovery": false,
+            "stopDebuggerOnAppExit": false,
+            "rendezvousTracking": false,
+            "rootDir": "${workspaceFolder}/dist/build",
             "preLaunchTask": "build-prod",
             "name": "Launch roku-mvvm (prod)"
         }
